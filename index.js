@@ -12,6 +12,16 @@ connect();
 app.use(cors());  
 app.use("/ProductImages", express.static("public/productImages"))
 
+
+const getSortOption= (sort)=>{
+    switch(sort) {
+        case "price_asc":  return { price: 1 }  
+        case "price_desc": return { price: -1 }  
+        case "name":       return { name: 1 }
+        default:           return { name: 1 }
+    }
+}
+
 app.get('/', (req, res) => {
     res.send("app connected")
 })
@@ -29,11 +39,32 @@ app.post('/addProduct', upload.single("image"), (req, res) => {
 
 
 app.get('/readProduct',async(req,res)=>{
-    const product =await productModel.find()
-    res.json({"message":"got the product",data:product})
-})
+        const { pageNo = 0, search = "", sort = "name", category = "" } = req.query
+        const skip = pageNo * 8
 
+        const query = {
+            name: { $regex: search, $options: "i" },   
+            ...(category && { category })                
+        }
+        
+  
+        const total = await productModel.countDocuments(query) 
+        
+        
 
+        const product = await productModel
+            .find(query)
+            .sort(getSortOption(sort))
+            .skip(skip)
+            .limit(8)
+
+        res.json({
+            message: "got the product",
+            data: product,
+            totalPages: Math.ceil(total / 8)       
+        })
+        
+    })
 
 
 
