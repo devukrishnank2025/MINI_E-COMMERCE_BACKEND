@@ -34,6 +34,9 @@ const getSortOption = (sort) => {
     }
 }
 const readProduct = async (req, res) => {
+
+    console.log("getting request in readProduct");
+    
     try {
         const { pageNo = 0, search = "", sort = "name", category = "" } = req.query
         const skip = pageNo * 8
