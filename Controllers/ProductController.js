@@ -3,6 +3,9 @@ const productModel = require("../Models/productModel");
 
 const saveProduct = async (req, res) => {
 
+    console.log('i got the call');
+    
+
     try {
         const product = new productModel({
             name: req.body.name,
@@ -17,8 +20,10 @@ const saveProduct = async (req, res) => {
         })
         console.log(product);
 
-        product.save()
-        res.json({ message: "Product added successfully", file: product })
+        const newres= await product.save()
+        if(newres){
+            res.json({ message: "Product added successfully", file: product })
+        }
 
     } catch (error) {
         console.log("error from save Product : ", error)

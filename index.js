@@ -8,6 +8,7 @@ const cors = require("cors");
 
 const adminRoute = require("./Routes/AdminRoutes");
 const productRoute = require("./Routes/ProductRoutes");
+const productModel = require("./Models/productModel");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -30,6 +31,17 @@ app.get("/", (req, res) => {
         message: "Mini E-Commerce Backend Running"
     });
 });
+
+// app.get("/temporary",async(req,res)=>{
+
+//     const data = await productModel.find()
+//     console.log(data);
+    
+
+//     console.log("this is the request in the temporary");
+    
+//     res.send("this is a request in the given route");
+// })
 
 
 
